@@ -100,6 +100,24 @@ body {
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
+.toolbar-select {
+  background-color: #fdfdfd;
+  border: 1px solid #b0b0b0;
+  padding: 3px 6px; /* Slightly less vertical padding than buttons to match height */
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: Arial, sans-serif;
+  font-size: 14px; /* Match toolbar font size */
+  height: 28px; /* Match button height (padding + border + font) */
+  vertical-align: middle; /* Align with buttons */
+}
+
+.toolbar-select:hover {
+  background-color: #e9e9e9;
+  border-color: #909090;
+}
+
 /* Styling for the remaining text placeholders in toolbar, if any */
 .toolbar span {
   padding: 3px 6px;
@@ -175,7 +193,23 @@ body {
   font-size: 12pt; /* Standard document font size */
   line-height: 1.5;
   color: #000000;
+  overflow-y: auto; /* Add scroll for overflow */
+  white-space: pre-wrap; /* Handle whitespace and line breaks like textarea */
+  -webkit-user-modify: read-write; /* Ensure it's editable on WebKit, though contentEditable usually suffices */
+  word-wrap: break-word; /* Ensure long words break and wrap */
 }
+
+/* Placeholder for contentEditable div */
+.text-area[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: #adb5bd; /* Placeholder text color */
+  position: absolute; /* Position it within the padding box */
+  left: 1in; /* Align with where text would start, considering padding */
+  top: 1in;  /* Align with where text would start, considering padding */
+  pointer-events: none; /* Make sure it doesn't interfere with clicks */
+  /* Adjust if padding changes */
+}
+
 
 /* Basic placeholder styling for toolbar items if they were actual buttons */
 .toolbar span {

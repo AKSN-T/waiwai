@@ -25,13 +25,22 @@
 <div class="toolbar">
   <button class="toolbar-button" id="bold-button">Bold</button>
   <button class="toolbar-button" id="italic-button">Italic</button>
-  <button class="toolbar-button" id="underline-button">Underline</button>
+  <button class="toolbar-button" id="strikethrough-button">Strikethrough</button>
+  <select id="fontsize-select" class="toolbar-select">
+    <option value="1">1 (8pt)</option>
+    <option value="2">2 (10pt)</option>
+    <option value="3" selected>3 (12pt)</option>
+    <option value="4">4 (14pt)</option>
+    <option value="5">5 (18pt)</option>
+    <option value="6">6 (24pt)</option>
+    <option value="7">7 (36pt)</option>
+  </select>
   <!-- Placeholder for other toolbar icons/buttons -->
   | <span>Align Left</span> | <span>Align Center</span> | <span>Align Right</span>
 </div>
 
 <div class="text-area-container">
-  <textarea class="text-area" placeholder="Start typing here..."></textarea>
+  <div class="text-area" contentEditable="true" data-placeholder="Start typing here..."></div>
 </div>
 
 <script src="script.js" defer></script>

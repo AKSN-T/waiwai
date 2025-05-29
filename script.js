@@ -1,65 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const textArea = document.querySelector('.text-area');
+  const textArea = document.querySelector('.text-area'); // This is now a div
   const boldButton = document.getElementById('bold-button');
   const italicButton = document.getElementById('italic-button');
-  const underlineButton = document.getElementById('underline-button');
+  const strikethroughButton = document.getElementById('strikethrough-button'); // New button
 
-  const applyStyle = (styleType) => {
-    const start = textArea.selectionStart;
-    const end = textArea.selectionEnd;
-    const selectedText = textArea.value.substring(start, end);
-    const textBefore = textArea.value.substring(0, start);
-    const textAfter = textArea.value.substring(end);
-
-    let styledText;
-    let newCursorPos = start;
-
-    switch (styleType) {
-      case 'bold':
-        styledText = `**${selectedText}**`;
-        newCursorPos += 2; // For the two asterisks at the start
-        break;
-      case 'italic':
-        styledText = `*${selectedText}*`;
-        newCursorPos += 1; // For the asterisk at the start
-        break;
-      case 'underline':
-        styledText = `__${selectedText}__`; // Using double underscores
-        newCursorPos += 2; // For the two underscores at the start
-        break;
-      default:
-        styledText = selectedText; // No change
+  // Helper function to ensure focus and execute command
+  const execFormatCommand = (command) => {
+    if (textArea) {
+      textArea.focus(); // Ensure the contentEditable div is focused
+      document.execCommand(command, false, null);
     }
-
-    textArea.value = textBefore + styledText + textAfter;
-
-    // Adjust cursor position/selection
-    if (selectedText) {
-      // If text was selected, re-select the modified text
-      textArea.setSelectionRange(start, start + styledText.length);
-    } else {
-      // If no text was selected, place cursor after the inserted opening tags
-      textArea.setSelectionRange(newCursorPos, newCursorPos);
-    }
-    textArea.focus(); // Keep focus on the textarea
   };
 
+  // Updated event listeners
   if (boldButton) {
-    boldButton.addEventListener('click', () => applyStyle('bold'));
+    boldButton.addEventListener('click', () => execFormatCommand('bold'));
   }
   if (italicButton) {
-    italicButton.addEventListener('click', () => applyStyle('italic'));
+    italicButton.addEventListener('click', () => execFormatCommand('italic'));
   }
-  if (underlineButton) {
-    underlineButton.addEventListener('click', () => applyStyle('underline'));
+  if (strikethroughButton) {
+    strikethroughButton.addEventListener('click', () => execFormatCommand('strikeThrough'));
   }
+
+  // Font size selection
+  const fontSizeSelect = document.getElementById('fontsize-select');
+  if (fontSizeSelect) {
+    fontSizeSelect.addEventListener('change', (event) => {
+      if (textArea) {
+        textArea.focus(); // Ensure the contentEditable div is focused
+        const selectedValue = event.target.value;
+        document.execCommand('fontSize', false, selectedValue);
+      }
+    });
+  }
+
+  // The old applyStyle function is no longer needed for these buttons.
+  // If it was used by other features, it should be kept, otherwise it can be removed.
+  // For this task, we assume it's only for these buttons and can be removed.
 
   // "Save as .txt" functionality
   const saveTxtButton = document.getElementById('save-txt');
   if (saveTxtButton) {
     saveTxtButton.addEventListener('click', () => {
       try {
-        const textToSave = textArea.value;
+        const textToSave = textArea.innerText; // Use innerText for contentEditable div
         const blob = new Blob([textToSave], { type: 'text/plain' });
         const link = document.createElement('a');
 
@@ -84,10 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveDocxButton) {
     saveDocxButton.addEventListener('click', () => {
       try {
-        const textToSave = textArea.value;
-        // For this mock, we'll save as plain text but with a .docx extension.
-        // A real .docx is a zip archive of XML files.
-        const blob = new Blob([textToSave], { type: 'text/plain' });
+        const textToSave = textArea.innerHTML; // Use innerHTML to preserve formatting
+        // For this mock, we'll save as HTML content but with a .docx extension.
+        const blob = new Blob([textToSave], { type: 'text/html' }); // Change MIME type
         const link = document.createElement('a');
 
         link.href = URL.createObjectURL(blob);
@@ -114,8 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // For this app, the main textarea is the primary content.
         // Modern browsers are pretty good at guessing, but specific print styles (@media print)
         // in style.css would offer more control over what's printed and how.
-        textArea.focus(); // Good practice to focus the area to be printed
-
+        if (textArea) { // Ensure textArea is defined
+          textArea.focus(); // Good practice to focus the area to be printed
+        }
         window.print();
       } catch (e) {
         console.error("Error printing to PDF:", e);
