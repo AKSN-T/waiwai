@@ -29,6 +29,45 @@ body {
   background-color: #dcdcdc; /* Slightly darker on hover */
 }
 
+/* Dropdown specific styles */
+.dropdown {
+  position: relative; /* For positioning dropdown-content */
+  display: inline-block; /* Keep it in line with other menu items */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 200px; /* Wider than typical menu items */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  top: 100%; /* Position below the parent li */
+  left: 0;
+  list-style-type: none; /* Remove bullets from dropdown ul */
+  padding: 0; /* Remove default ul padding */
+  margin: 0; /* Remove default ul margin */
+  border: 1px solid #ccc; /* Optional: border for the dropdown box */
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content li {
+  color: black; /* Text color for dropdown items */
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block; /* Stack items vertically */
+  cursor: pointer;
+  /* Override any direct .menu-bar li styles if necessary, like padding or inline-block */
+  /* display: block is key here */
+}
+
+.dropdown-content li:hover {
+  background-color: #e0e0e0;
+}
+
 .toolbar {
   background-color: #e0e0e0; /* Slightly darker gray */
   padding: 10px 12px;
@@ -66,6 +105,54 @@ body {
   padding: 3px 6px;
   cursor: default;
   color: #333; /* Make them look like disabled/text elements */
+}
+
+/* Print specific styles */
+@media print {
+  body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; /* Ensure no body background color bleeds through */
+    width: 100%;
+    height: auto;
+  }
+
+  .menu-bar,
+  .toolbar,
+  .text-area-container::before, /* If any pseudo-elements exist */
+  .text-area-container::after { /* If any pseudo-elements exist */
+    display: none !important;
+  }
+
+  .text-area-container {
+    padding: 0 !important; /* Remove padding around the text area itself */
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important; /* Show all content */
+    background-color: #ffffff !important; /* Ensure container is white */
+  }
+
+  .text-area {
+    width: 100% !important; /* Take full printable width */
+    height: auto !important; /* Adjust height to content */
+    min-height: 0 !important; /* Override screen min-height */
+    border: none !important; /* No border in print */
+    box-shadow: none !important; /* No shadow in print */
+    padding: 0.5in !important; /* Standard print margins, adjust if needed */
+    /* The 1in padding from screen styles might be too much combined with browser margins,
+       or could be kept if browsers are set to no margins. 0.5in is a safer bet. */
+    color: #000000 !important; /* Ensure black text */
+    background-color: #ffffff !important; /* Ensure white background */
+    font-size: 12pt !important; /* Explicitly set font size for print */
+    line-height: 1.4 !important; /* Adjust line height for print if needed */
+    overflow: visible !important; /* Show all content */
+  }
+
+  /* Hide any other specific elements if necessary by adding their selectors here */
+  /* For example: #some-floating-button { display: none !important; } */
 }
 
 .text-area-container {
